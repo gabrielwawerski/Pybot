@@ -10,12 +10,14 @@ my_group = "threadId"
 
 
 class WebController:
-    def send_message(self, driver, message):
-        msg_input = driver.find_element_by_id("placeholder-fs2po")
-        msg_input.click()
-        WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.ID, "placeholder-fs2po"))
+    @staticmethod
+    def send_message(driver, message):
+        elem = WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.XPATH, "//div[@class='_1mf _1mj']")),
         )
+        msg_input = driver.find_element_by_xpath("//div[@class='_1mf _1mj']")
+        msg_input.click()
+
         msg_input.send_keys(message)
         msg_input.send_keys(Keys.ENTER)
         print(f"message sent: {message}")
@@ -23,45 +25,56 @@ class WebController:
     def __init__(self, chatbot=Chatbot("ezelbot66@gmail.com", "lezetykurwo", my_group)):
         self.chatbot = chatbot
         print("init starts")
-        driver = webdriver.Chrome()
-        print(driver.name)
-        driver.get("https://www.messenger.com/")
+        self.driver = webdriver.Chrome()
+        print(self.driver.name)
+        self.driver.get("https://www.messenger.com/")
 
         while True:
             try:
                 # accept cookies
-                element = WebDriverWait(driver, 10).until(
+                element = WebDriverWait(self.driver, 10).until(
                     EC.presence_of_element_located((By.ID, "cookie_banner_title"))
                 )
-                btn = driver.find_element_by_id('u_0_j')
+
+                WebDriverWait(self.driver, 5).until(
+                    EC.presence_of_element_located((By.XPATH, "//button[@id='u_0_g']"))
+                )
+                btn = self.driver.find_element_by_xpath("//button[@id='u_0_g']")
                 btn.click()
 
                 # select login input
-                login_input = driver.find_element_by_id("email")
+                login_input = self.driver.find_element_by_id("email")
                 login_input.send_keys(chatbot.username)
-                password_input = driver.find_element_by_id("pass")
+                password_input = self.driver.find_element_by_id("pass")
                 password_input.send_keys(chatbot.password)
-                login_button = driver.find_element_by_id("loginbutton")
+                login_button = self.driver.find_element_by_id("loginbutton")
                 login_button.click()
+
+                # elem = WebDriverWait(self.driver, 10).until(
+                #     EC.presence_of_element_located((By.CLASS_NAME, "j9ispegn pmk7jnqg k4urcfbm datstx6m lupvgy83 kr520xx4 mdpwds66 b2cqd1jy n13yt9zj eh67sqbx"))
+                # )
+                # i = self.driver.find_element_by_class_name("j9ispegn pmk7jnqg k4urcfbm datstx6m lupvgy83 kr520xx4 mdpwds66 b2cqd1jy n13yt9zj eh67sqbx")
+                # i.click()
+
+                # WebDriverWait(self.driver, 5).until(
+                #     EC.presence_of_element_located((By.CLASS_NAME, ""))
+                # )
 
                 # features_lock_error = WebDriverWait(driver, 5).until(
                 #     EC.presence_of_element_located((By.CLASS_NAME, "_1mf _1mj"))
                 # )
                 # ok = driver.find_element_by_class_name("_1mf _1mj")
                 # ok.click()
-                self.send_message(driver, "hi! I am gabe")
+                self.send_message(self.driver, "hi! I am gabe")
             finally:
-                print(f"element not found... any data?: {driver}")
+                print(f"element not found... any data?: {self.driver}")
                 # driver.quit()
 
+    def __enter__(self):
+        pass
 
-def __enter__(self):
-    pass
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        pass
 
-
-def __exit__(self, exc_type, exc_val, exc_tb):
-    pass
-
-
-def wait_for_message(self):
-    pass
+    def wait_for_message(self):
+        pass
