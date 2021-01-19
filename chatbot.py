@@ -11,7 +11,7 @@ class Chatbot:
         self._version = "v0.1"
         self._modules = list(range(10))
         self._message_log = list(range(100))
-        self._refresh_rate = 100
+        self.refresh_rate = 0.1
         self._startup_time = time()
         print(time())
 
